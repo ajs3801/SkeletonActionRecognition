@@ -4,11 +4,9 @@ import numpy as np
 import cv2
 import os
 import extrafeatures
-import count
 import draw
 import StartEngine as s
 import timeit
-import csv
 from configs import config, actions, mp_pose
 from extract_v3 import get_parts
 from model_v3 import Model
