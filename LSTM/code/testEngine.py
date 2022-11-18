@@ -77,7 +77,7 @@ class Engine:
         return model_input
 
     # 입력 : 비디오, 모델
-    # 출력 : 카운트한 액션을 순서대로 리스트에 넣어서 반환
+    # 출력 : 카운트된 운동, 평균 fps 반환
     def test_engine(self, video):
         model_inputs = np.empty((1, data_dim))
         action_window = []
@@ -158,6 +158,7 @@ class Engine:
                     sum = 0
                 i += 1
 
+                # 현재 운동 카운트 화면에 표시
                 try:
                     draw.draw_text(
                         image,
