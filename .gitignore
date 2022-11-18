@@ -5,3 +5,4 @@ LSTM/code/dataset
 LSTM/code/test_log
 LSTM/code/engine_test_log
 *.DS_Store
+*.pyc
