@@ -4,3 +4,4 @@ LSTM/code/skeleton_npy
 LSTM/code/dataset
 LSTM/code/test_log
 LSTM/code/engine_test_log
+*.DS_Store
