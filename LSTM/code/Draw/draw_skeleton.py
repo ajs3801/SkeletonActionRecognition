@@ -15,7 +15,7 @@ mp_pose = mp.solutions.pose
 # COLOR : skeleton Color -> (ex) (20THCIKNESS,192,255)
 
 
-def DrawSkeleton(image, landmark_pose, COLOR):
+def draw_skeleton(image, landmark_pose, COLOR):
     image_height, image_width, _ = image.shape
 
     COLOR = (203, 192, 255)

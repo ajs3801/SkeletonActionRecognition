@@ -18,7 +18,7 @@ model_name = "Modelv3_{}".format(config["model_version"])
 
 
 class Model(nn.Module):
-    def __init__(self, learning_rate, device):
+    def __init__(self, device="cpu", learning_rate=0.0001):
         super(Model, self).__init__()
 
         self.lstm1 = nn.LSTM(

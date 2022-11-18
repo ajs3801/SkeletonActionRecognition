@@ -1,70 +1,87 @@
-from configs import *
-
-action_count_length = config['action_count_length']
-
-cur_flags = {'squat-down': False, 'squat-up': False, 'pushup-down': False,
-             'pushup-up': False, 'lunge-down': False, 'lunge-up': False,
-             'stand': False, 'push2stand': False, 'stand2push': False}
-
-prev_flags = {'squat-down': False, 'squat-up': False, 'pushup-down': False,
-              'pushup-up': False, 'lunge-down': False, 'lunge-up': False,
-              'stand': False, 'push2stand': False, 'stand2push': False}
-
-cnt = {'squat': 0, 'pushup': 0, 'lunge': 0}
+from configs import actions
 
 
-def resetCnt():
-    for key, val in cnt.items():
-        cnt[key] = 0
+class Counter:
+    def __init__(self, count_threshold):
+        self.cur_flags = {
+            "squat-down": False,
+            "squat-up": False,
+            "pushup-down": False,
+            "pushup-up": False,
+            "lunge-down": False,
+            "lunge-up": False,
+            "stand": False,
+            "push2stand": False,
+            "stand2push": False,
+        }
+        self.prev_flags = {
+            "squat-down": False,
+            "squat-up": False,
+            "pushup-down": False,
+            "pushup-up": False,
+            "lunge-down": False,
+            "lunge-up": False,
+            "stand": False,
+            "push2stand": False,
+            "stand2push": False,
+        }
+        self.cnt = {"squat": 0, "pushup": 0, "lunge": 0}
+        self.threshold = count_threshold
 
+    # 카운트 초기화
+    def reset_cnt(self):
+        for key, val in self.cnt.items():
+            self.cnt[key] = 0
 
-def resetPrevFlags():  # 이전 플래그 전부 false로 초기화
-    for action in actions:
-        prev_flags[action] = False
+    # 이전 플래그 전부 false로 초기화
+    def reset_prev_flags(self):
+        for action in actions:
+            self.prev_flags[action] = False
 
+    # 현재 플래그 전부 false로 초기화
+    def reset_cur_flags(self):
+        for action in actions:
+            self.cur_flags[action] = False
 
-def resetCurFlags():  # 현재 플래그 전부 false로 초기화
-    for action in actions:
-        cur_flags[action] = False
+    # 현재 플래그가 켜져있는 액션을 반환
+    def get_cur_flag(self):
+        for key, val in self.cur_flags.items():
+            if val:
+                return key
 
+    # 현재 플래그에서 입력으로 받은 액션만 키고 나머지는 다 끔
+    def cur_flag_on(self, action):
+        self.reset_cur_flags()
+        self.cur_flags[action] = True
 
-def getCurFlags():  # 현재 플래그가 켜져있는 액션을 반환
-    for key, val in cur_flags.items():
-        if val:
-            return key
+    # 이전 플래그에서 입력으로 받은 액션만 키고 나머지는 다 끔
+    def prev_flag_on(self, action):
+        self.reset_prev_flags()
+        self.prev_flags[action] = True
 
+    # 현재 플래그가 켜져있는 운동을 이전 플래그로 옮김
+    def cur2prev(self):
+        cur_flag = self.get_cur_flag()
+        self.reset_cur_flags()
+        self.reset_prev_flags()
+        self.prev_flag_on(cur_flag)
 
-def curFlagOn(action):  # 입력으로 받은 액션의 현재 플래그만 키고 나머지는 다 끔
-    resetCurFlags()
-    cur_flags[action] = True
+    # 입력 : action window
+    # 출력 : 카운트된 운동
+    def count(self, action_window):
+        for action in actions:
+            if action_window.count(action) >= self.threshold:
+                self.cur2prev()
+                self.cur_flag_on(action)
 
-
-def prevFlagOn(action):  # 입력으로 받은 액션의 이전 플래그만 키고 나머지는 다 끔
-    resetPrevFlags()
-    prev_flags[action] = True
-
-
-def cur2prev():  # 현재 플래그가 켜져있는 운동을 찾아서 이전 플래그에서 그 운동을 킴
-    cur_flag = getCurFlags()
-    resetCurFlags()
-    resetPrevFlags()
-    prevFlagOn(cur_flag)
-
-
-def countAction(action_count):
-    for a in actions:
-        if action_count.count(a) >= 6:
-            cur2prev()
-            curFlagOn(a)
-
-    if prev_flags['squat-down'] and cur_flags['squat-up']:
-        cnt['squat'] += 1
-        return True, 'S'
-    elif prev_flags['pushup-down'] and cur_flags['pushup-up']:
-        cnt['pushup'] += 1
-        return True, 'P'
-    elif prev_flags['lunge-down'] and cur_flags['lunge-up']:
-        cnt['lunge'] += 1
-        return True, 'L'
-    else:
-        return False, None
+        if self.prev_flags["squat-down"] and self.cur_flags["squat-up"]:
+            self.cnt["squat"] += 1
+            return "S"
+        elif self.prev_flags["pushup-down"] and self.cur_flags["pushup-up"]:
+            self.cnt["pushup"] += 1
+            return "P"
+        elif self.prev_flags["lunge-down"] and self.cur_flags["lunge-up"]:
+            self.cnt["lunge"] += 1
+            return "L"
+        else:
+            return None

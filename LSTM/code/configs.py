@@ -42,5 +42,5 @@ config["output_dim"] = 1  # 라벨 크기
 config["lstm_layers"] = 1
 config["dropout"] = 0
 config["threshold"] = 0.8
-config["action_count_length"] = 10
+config["action_count_threshold"] = 10
 config["model_version"] = "mk11"

@@ -36,7 +36,7 @@ test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=Tr
 
 # 모델 설정 / cpu, gpu 설정
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model = Model(learning_rate, device)
+model = Model(device, learning_rate)
 model.to(device)
 
 
