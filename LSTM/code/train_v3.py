@@ -50,14 +50,27 @@ def main():
 
     # Best Valid Acc를 기록한 모델로 Test 진행
     model.restore()
+
     real_y, pred_y = model.predict(test_loader)
     correct = len(np.where(pred_y == real_y)[0])
     total = len(pred_y)
     test_acc = correct / total
-    print("Test Accuracy (Top-1) at Best Epoch : %.2f" % (test_acc))
+    print("Test Accuracy (Top-1) at Best Epoch : %.4f" % (test_acc))
 
     # 학습 그래프
     model.plot()
+
+    # 이미 학습된 모델을 불러와서 테스트 진행할 경우
+    # model_path = (
+    #     "/Users/jaejoon/SkeletonActionRecognition/LSTM/code/best_model/Modelv3_mk11.pt"
+    # )
+    # test_model = Model(device)
+    # test_model.load_state_dict(torch.load(model_path, device))
+    # real_y, pred_y = test_model.predict(test_loader)
+    # correct = len(np.where(pred_y == real_y)[0])
+    # total = len(pred_y)
+    # test_acc = correct / total
+    # print("Test Accuracy of Model : %.4f" % (test_acc))
 
 
 if __name__ == "__main__":

@@ -77,12 +77,13 @@ class Engine:
         return model_input
 
     # 입력 : 비디오, 모델
-    # 출력 : 카운트된 운동, 평균 fps 반환
+    # 출력 : 카운트된 운동의 시퀀스, 운동 별 카운트 개수 ,평균 fps 반환
     def test_engine(self, video):
         model_inputs = np.empty((1, data_dim))
-        action_window = []
+        action_window = []  # 최근 self.window_size개 만큼의 인식된 운동 클래스를 보는 윈도우
+        counted_action_sequence = []  # 비디오에서 카운트된 운동의 시퀀스
 
-        _fpss = np.array([])
+        fpss = np.array([])
 
         cap = cv2.VideoCapture(video)
 
@@ -96,10 +97,10 @@ class Engine:
                 start_t = timeit.default_timer()
                 success, image = cap.read()
                 if not success:
-                    print(video)
+                    # print(video)
                     if video == 0:  # 웹캠 입력일 경우
                         continue
-                    else:
+                    else:  # 비디오 입력일 경우
                         break
 
                 # 미디어파이프를 이용하여 스켈레톤 추출
@@ -114,7 +115,6 @@ class Engine:
                     )
                 except:
                     pass
-                # cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
 
                 image = cv2.flip(image, 1)
 
@@ -133,7 +133,7 @@ class Engine:
                     prob, action = self.test_model(torch.Tensor(model_inputs))
                     prob = prob.item()
 
-                    # 임계값을 넘었을 때만 액션(운동)이 인식된 것으로 처리
+                    # prob_threshold를 넘었을 때만 액션(운동 클래스)이 인식된 것으로 처리
                     if prob > self.prob_threshold:
                         action_window.append(action)
                     else:
@@ -143,6 +143,8 @@ class Engine:
                     if len(action_window) > self.window_size:
                         action_window.pop(0)  # 새로운 액션 들어오면 맨 처음 액션 버림
                         counted_action = self.counter.count(action_window)
+                        if counted_action != None:
+                            counted_action_sequence.append(counted_action)
 
                 # fps 계산
                 terminate_t = timeit.default_timer()
@@ -157,6 +159,7 @@ class Engine:
                     i = 0
                     sum = 0
                 i += 1
+                fpss = np.append(fpss, [float(SFPS)])
 
                 # 현재 운동 카운트 화면에 표시
                 try:
@@ -175,17 +178,60 @@ class Engine:
                 cv2.waitKey(1)
 
         cap.release()
-        _avg_fps = np.average(_fpss)
-        return counted_action, _avg_fps
+        avg_fps = np.average(fpss)
+
+        return counted_action_sequence, self.counter.cnt, int(avg_fps)
+
+
+def get_label(video):
+    label = video[:-7]
+    return label
 
 
 def main():
+    # 엔진에 탑재될 모델
     model_path = (
         "/Users/jaejoon/SkeletonActionRecognition/LSTM/code/best_model/Modelv3_mk11.pt"
     )
-    my_engine = Engine(model_path, 10, 0.5, 5)
+    # 엔진 생성, 파라미터 설정
+    my_engine = Engine(
+        model_path, window_size=10, prob_threshold=0.7, count_threshold=8
+    )
+    # 엔진 설정값 보여줌
     my_engine.print_engine_config()
-    my_engine.test_engine(0)
+
+    # 엔진 테스트
+    test_videos = os.listdir("./videos/new_engine_test_videos")
+    num_videos = len(test_videos)
+    fpss = np.array([])
+    correct = 0
+    miss_videos = []
+    for test_video in test_videos:
+        if not test_video.endswith(".mp4"):
+            continue
+        # print(test_video)
+        label = test_video[:-7]
+        test_video_path = os.path.join("./videos/new_engine_test_videos", test_video)
+        action_sequence, counts, fps = my_engine.test_engine(test_video_path)
+        fpss = np.append(fpss, [fps])
+
+        if len(action_sequence) == 1:
+            if label == action_sequence[0]:
+                correct += 1
+        elif label == "stand" and len(action_sequence) == 0:
+            correct += 1
+        else:
+            miss_videos.append(test_video)
+
+        my_engine.counter.reset_cnt()
+
+    avg_fps = np.average(fpss)
+    acc = correct / num_videos
+
+    print("total videos :", num_videos)
+    print("acc : %.4f" % (acc))
+    print("average fps :", int(avg_fps))
+    print("miss counted videos :", miss_videos)
 
 
 if __name__ == "__main__":

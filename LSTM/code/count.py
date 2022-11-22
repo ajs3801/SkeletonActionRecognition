@@ -3,6 +3,7 @@ from configs import actions
 
 class Counter:
     def __init__(self, count_threshold):
+        # 현재 플래그
         self.cur_flags = {
             "squat-down": False,
             "squat-up": False,
@@ -14,6 +15,7 @@ class Counter:
             "push2stand": False,
             "stand2push": False,
         }
+        # 이전 플래그
         self.prev_flags = {
             "squat-down": False,
             "squat-up": False,
@@ -25,7 +27,9 @@ class Counter:
             "push2stand": False,
             "stand2push": False,
         }
+        # 운동 클래스별 카운트 개수
         self.cnt = {"squat": 0, "pushup": 0, "lunge": 0}
+        # 카운트를 위한 threshold
         self.threshold = count_threshold
 
     # 카운트 초기화
@@ -70,18 +74,22 @@ class Counter:
     # 출력 : 카운트된 운동
     def count(self, action_window):
         for action in actions:
+            # 윈도우에서 특정 운동이 threshold 보다 많이 있으면 현재 플래그를 킴
             if action_window.count(action) >= self.threshold:
                 self.cur2prev()
                 self.cur_flag_on(action)
 
+        # squat-down -> squat-up => squat!
         if self.prev_flags["squat-down"] and self.cur_flags["squat-up"]:
             self.cnt["squat"] += 1
-            return "S"
+            return "squat"
+        # pushup-down -> pushup-up => pushup!
         elif self.prev_flags["pushup-down"] and self.cur_flags["pushup-up"]:
             self.cnt["pushup"] += 1
-            return "P"
+            return "pushup"
+        # lunge-down -> lunge-up => lunge!
         elif self.prev_flags["lunge-down"] and self.cur_flags["lunge-up"]:
             self.cnt["lunge"] += 1
-            return "L"
+            return "lunge"
         else:
             return None
