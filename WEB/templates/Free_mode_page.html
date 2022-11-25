@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bootstrap demo</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./Start_page.html" style="font-size: 48pt; font-weight: 900; color:white; padding-left: 30px;">ExER</a>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <span class="navbar-text" style="font-size: 20pt; font-weight: 500; color:#D0006F; padding-left:30px; padding-top: 37px;">
+                            Free mode             
+                        </span>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./Setting_page.html" style="font-size: 25pt; font-weight: 500; color:white; padding-left:70px; padding-top: 30px;">Change mode</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./Exercise_guide_page.html" style="font-size: 25pt; font-weight: 500; color:white; padding-left:30px; padding-top: 30px;">Posture guide</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- content -->
+        <div id="content">
+            <!-- webcam -->
+            <section id="webcam">
+                <div id="real_time_view">
+                    <img src="{{ url_for('video_feed') }}" style="width: 1530px; height: 850px;"/>
+                </div>
+            </section>
+            
+            <aside id="aside">
+                <!-- time -->
+                <div id="time">
+                    <h2>Time</h2> 
+                </div>
+                <div id="cur_time">
+                    <h1 style="color: #D0006F">10 : 30 am</h1>
+                    <p>운동한지 10분 30초</p> 
+                </div>
+
+                <!-- count -->
+                <div id="count">
+                    <h2>Exercise</h2> 
+                </div>
+                <div id="cur_count">
+                    <div id="squat">
+                        <p>Squat : 0<br/></p>
+                    </div>
+                    <div id="lunge">
+                        <p>Lunge : 0<br/></p>
+                    </div>
+                    <div id="pushup">
+                        <p>Pushup : 0<br/></p>
+                    </div>
+                    <div id="total">
+                        <p>Total : 0<br/></p>
+                    </div>
+                    <div id="calories">
+                        <p>Calories : 0<br/></p>
+                    </div>
+                </div>
+
+                <!-- feedback -->
+                <div id="feedback">
+                    <h2>Feedback</h2> 
+                </div>
+                <div id="cur_feedback">
+                    <p>다리를 조금 더 굽히세요!</p> 
+                </div>
+
+                <!-- in food -->
+                <div id="food">
+                    <img src="./bab.png" style="width: 100px; height: 100px;"/>
+                    <p>오늘은,<br/><span id="pink" style="color: #d0006f;">밥 한공기</span>만큼<br/>운동했어요</p>
+                </div>
+            </aside>
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+            
+        <script>
+            const ActionTag = document.getElementById("action");
+        
+            const SquatTag = document.getElementById("squat");
+        
+            const LungeTag = document.getElementById("lunge");
+        
+            const PushupTag = document.getElementById("pushup");
+        
+            function getData() {
+            $.ajax({
+                type:"GET",
+                url : 'http://127.0.0.1:5000/test',
+                dataType : 'JSON',
+                contentType: "application/json",
+                success : function(data){
+                    console.log(data.result2);
+                    ActionTag.textContent = data.result2['Action'];
+                    SquatTag.textContent = data.result2['Squat'];
+                    LungeTag.textContent = data.result2['Lunge'];
+                    PushupTag.textContent = data.result2['Pushup'];
+                },
+                error : function(request,status,error) {
+        
+                }
+            })
+            }
+        
+            setInterval(getData,200)
+        </script>
+        <script>
+            ScrollOut({});
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <style>
+   :root{
+        /* Color */
+        --color-white: #ffffff;
+        --color-light-white: #eeeeee;
+        --color-dark-white: #bdbdbd;
+        --color-pink: #fe918d;
+        --color-dark-pink: #ff6863;
+        --color-black: #4d4d4d;
+        --color-dark-grey: #4d4d4d;
+        --color-grey: #616161;
+        --color-light-grey: #7c7979;
+        --color-blue: #73aace;
+        --color-yellow: #fff7d1;
+        --color-orange: #feb546;
+        --color-black: #000000;
+
+        /* font size */
+        --font-large: 48px;
+        --font-medium: 28px;
+        --font-regular: 18px;
+        --font-samll: 16px;
+        --font-micro: 14px;
+
+        /* font weight */
+        --weight-bold: 700;
+        --weight-semi-bold: 600;
+        --weight-regular: 400;
+
+        /* size */
+        --size-border-radius: 4px;
+
+        
+        --animation-duration: 400ms;
+      }
+
+      html,
+      body {
+        margin: 0;
+      }
+
+      html {
+        min-height: 100%;
+        box-sizing: border-box;
+        font-size: 10px;
+      }
+
+      body {
+        height: 100%;
+        width: 100%;
+        background-image: linear-gradient(
+          180deg,
+          #F4F3EA 0%,
+          #A3C6C4 40%,
+          #F4F3EA 100%
+        );
+        background-repeat: no-repeat;
+      }
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+      input {
+        border-top: none;
+        border-left: none;
+        border-right:none;
+        background-color: #d3d3d3;
+        border-bottom: 1px solid black;
+      }
+
+      input[type=text]:focus {
+        outline: none;
+      }
+
+      h1,
+      p {
+        color: #A50034;
+        font-family: 'Nunito', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      h1 {
+        margin-bottom: 1rem;
+        font-size: 4rem;
+      }
+
+      p {
+        font-size: 2rem;
+        line-height: 2.8rem;
+      }
+
+      p:last-child {
+        margin-bottom: -6px;
+      }
+
+      button {
+        background-color: transparent;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        color: var(--color-white);
+      }
+
+      button:hover {
+        color:#5961f9;
+        transition: all var(--animation-duration) ease-in
+      }
+      
+      .site-wrap {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 10rem 2rem;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #nav {
+        width: 100%;
+        height: 80px;
+        position: absolute;
+        left: 0px;
+        top:0px;
+        margin-bottom: 20px;
+        background: white;
+        box-shadow: 0px 0px 0 1px transparentize(#204754, 0.97),
+          0px 0px 0 3px transparentize(#204754, 0.98);
+        text-align: center;
+      }
+
+      #real_time_view {
+        width: 1100px;
+        height: 650px;
+        margin-left: 150px;
+        margin-bottom: 20px;
+        padding: 4rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0px 0px 0 1px transparentize(#204754, 0.97),
+          0px 0px 0 3px transparentize(#204754, 0.98);
+        margin-top: 20px;
+      }
+
+      #status_action {
+        width: 200px;
+        height: 150px;
+        margin-bottom: 20px;
+        padding: 4rem;
+        background: white;
+        border-radius: 8px;
+        position: fixed;
+        left: 50px;
+        top: 130px;
+        box-shadow: 0px 0px 0 1px transparentize(#204754, 0.97),
+          0px 0px 0 3px transparentize(#204754, 0.98);
+      }
+
+      #status_squat {
+        width: 200px;
+        height: 150px;
+        margin-bottom: 20px;
+        padding: 4rem;
+        background: white;
+        border-radius: 8px;
+        position: fixed;
+        left: 50px;
+        top: 290px;
+        box-shadow: 0px 0px 0 1px transparentize(#204754, 0.97),
+          0px 0px 0 3px transparentize(#204754, 0.98);
+      }
+
+      #status_lunge {
+        width: 200px;
+        height: 150px;
+        margin-bottom: 20px;
+        padding: 4rem;
+        background: white;
+        border-radius: 8px;
+        position: fixed;
+        left: 50px;
+        top: 460px;
+        box-shadow: 0px 0px 0 1px transparentize(#204754, 0.97),
+          0px 0px 0 3px transparentize(#204754, 0.98);
+      }
+
+      #status_pushup {
+        width: 200px;
+        height: 150px;
+        margin-bottom: 20px;
+        padding: 4rem;
+        background: white;
+        border-radius: 8px;
+        position: fixed;
+        left: 50px;
+        top: 630px;
+        box-shadow: 0px 0px 0 1px transparentize(#204754, 0.97),
+          0px 0px 0 3px transparentize(#204754, 0.98);
+      }
+
+      #title {
+        padding-top: 9px;
+        color:#A50034;
+        font-size: var(--font-large);
+        font-family: 'Nunito', sans-serif;
+      }
+      
+      section:last-child {
+        margin-bottom: 0;
+      }
+
+      [data-scroll] {
+        opacity: 0;
+        will-change: transform, scale, opacity;
+        transform: translateY(6rem) scale(0.93);
+        transition: all 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      [data-scroll='in'] {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      [data-scroll='out'] {
+        opacity: 0;
+      }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+  <!-- CSS only -->
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" rel="stylesheet"/>
+  <script src="https://unpkg.com/scroll-out/dist/scroll-out.min.js">
+  </script>
+  <title>
+   LG U+ AI 홈트레이닝
+  </title>
+ </head>
+ <body>
+  <nav class="navbar navbar-expand-lg bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="./Start_page.html" style="font-size: 48pt; font-weight: 900; color:white; padding-left: 30px;">LG U+</a>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <span id="Mode" class="navbar-text" style="font-size: 20pt; font-weight: 500; color:#D0006F; padding-left:30px; padding-top: 37px;">
+                    Free mode             
+                </span>
+                <li class="nav-item">
+                    <button id="challenge" class="nav-link" style="font-size: 25pt; font-weight: 500; color:white; padding-left:70px; padding-top: 30px;">Change mode</button>
+                </li>
+                <li class="nav-item">
+                    <button id="reset"class="nav-link" href="./Exercise_guide_page.html" style="font-size: 25pt; font-weight: 500; color:white; padding-left:30px; padding-top: 30px;">Reset</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+  <div class="content">
+   <!-- <section id="nav">
+    <div id="title">
+     실시간 행동인식
+    </div>
+   </section> -->
+   <section data-scroll="" id="real_time_view" class = "bg-dark">
+    <p style="font-size: 30px" style="color: #A50034">현재 화면</p>
+    <img style="margin-left: 10px; "height="530px" src="{{ url_for('video_feed') }}" width="980px"/>
+   </section>
+
+   <section id="status_action" class = "bg-dark">
+    <p id="action_label" style="color:#A50034">현재 운동</p>
+    <p id="action" style="font-size: 30px; color:#eeeeee;">
+      
+    </p>
+   </section>
+
+   <section id="status_squat" class = "bg-dark">
+    <div>
+      <p id="squat_label" style="color:#A50034">스쿼트</p>
+      <p id="squat" style="font-size: 40px; color:#eeeeee;">0</p>
+    </div>
+   </section>
+
+   <section id="status_lunge" class = "bg-dark">
+    <div>
+      <p id="lunge_label" style="color:#A50034">런지</p>
+      <p id="lunge" style="font-size: 40px; color:#eeeeee;">
+        0
+      </p>
+    </div>
+   </section>
+
+   <section id="status_pushup" class = "bg-dark">
+    <div>
+      <p id="pushup_label" style="color:#A50034">푸쉬업</p>
+      <p id="pushup" style="font-size: 40px; color:#eeeeee;">
+        0
+      </p>
+    </div>
+   </section>
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    
+  <script>
+    const ActionTag = document.getElementById("action");
+
+    const SquatTag = document.getElementById("squat");
+
+    const LungeTag = document.getElementById("lunge");
+
+    const PushupTag = document.getElementById("pushup");
+
+    const Reset = document.getElementById("reset");
+
+    const Challenge = document.getElementById("challenge");
+    
+    const Mode = document.getElementById("Mode");
+
+    let CHALLENGE_FLAG = false;
+    let squat_challenge;
+    let lunge_challenge;
+    let pushup_challenge;
+
+    function getData() {
+      $.ajax({
+        type:"GET",
+        url : 'http://127.0.0.1:5000/test',
+        dataType : 'JSON',
+        contentType: "application/json",
+        success : function(data){
+            console.log(data.result2);
+
+            if (data.result2['Action'] === "squat") {
+              ActionTag.textContent = "스쿼트";
+            }
+
+            else if (data.result2['Action'] === "lunge") {
+              ActionTag.textContent = "런지";
+            }
+
+            else if (data.result2['Action'] === "pushup") {
+              ActionTag.textContent = "푸쉬업";
+            }
+
+            else if (data.result2['Action'] === "stand") {
+              ActionTag.textContent = "준비 중";
+            }
+
+            else if (data.result2['Action'] === "lying") {
+              ActionTag.textContent = "준비 중";
+            }
+            
+            else {
+              ActionTag.textContent = "준비 중";
+            }
+            
+            if (CHALLENGE_FLAG) {
+              let squat_flag = false;
+              let lunge_flag = false;
+              let pushup_flag = false;
+
+              if (parseInt(data.result2['Squat']) === squat_challenge) {
+                squat_flag = true;
+              }
+
+              if (parseInt(data.result2['Lunge']) === lunge_challenge) {
+                lunge_flag = true;
+              }
+
+              if (parseInt(data.result2['Pushup']) === pushup_challenge) {
+                pushup_flag = true;
+              }
+
+              if (squat_flag===true && lunge_flag===true && pushup_flag===true) {
+                CHALLENGE_FLAG = false;
+                Mode.textContent = "Free mode";
+              }
+
+              SquatTag.textContent = data.result2['Squat'] + ' / ' + String(squat_challenge);
+              LungeTag.textContent = data.result2['Lunge'] + ' / ' + String(lunge_challenge);
+              PushupTag.textContent = data.result2['Pushup'] + ' / ' + String(pushup_challenge);
+            }
+            else {
+              SquatTag.textContent = data.result2['Squat'];
+              LungeTag.textContent = data.result2['Lunge'];
+              PushupTag.textContent = data.result2['Pushup'];
+            }
+        },
+        error : function(request,status,error) {
+
+        }
+      })
+    }
+    
+    setInterval(getData,200)
+
+    // reset button
+    Reset.addEventListener("click", () => {
+      console.log("Clicked");
+      $.ajax({
+        type:"POST",
+        url : 'http://127.0.0.1:5000/reset',
+        dataType : 'JSON',
+        contentType: "application/json",
+        success : function(data){
+        
+        },
+        error : function(request,status,error) {
+
+        }
+      })
+    });
+    
+    Challenge.addEventListener("click", () => {
+      CHALLENGE_FLAG = true;
+      squat_challenge = parseInt(SquatTag.textContent) + 5;
+      lunge_challenge = parseInt(LungeTag.textContent) + 5;
+      pushup_challenge = parseInt(PushupTag.textContent) + 5;
+      Mode.textContent = "Challenge Mode!";
+    });
+  </script>
+  <script>
+    ScrollOut({});
+    
+  </script>
+ </body>
+</html>
