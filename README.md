@@ -6,8 +6,13 @@ The variety methods for recognizing the action based on the feature of human ske
 
 > ```LSTM``` : (간단한 설명)
 
-> ```Posture``` : (간단한 설명)
+> ```Posture``` : It only look one skeleton's coordinate and inference what is current action(posture).
 
 > ```SkeketonMHI``` : (간단한 설명)
 
 > ```Transformer``` : (간단한 설명)
+
+> ```WEB```: Web UI of main model, LSTM
+
+## Common data preprocessing
+It extracts the normalized coordinates by using Mediapipe.
