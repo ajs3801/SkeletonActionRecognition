@@ -6,3 +6,7 @@ LSTM/code/test_log
 LSTM/code/engine_test_log
 *.DS_Store
 *.pyc
+
+SkeletonMHI_ObjectDetection/code/__pycache__/*
+LSTM/code/Draw/__pycache__/*
+LSTM/code/__pycache__/*
