@@ -8,7 +8,7 @@ The variety methods for recognizing the action based on the feature of human ske
 
 > ```Posture``` : It only look one skeleton's coordinate and inference what is current action(posture).
 
-> ```SkeketonMHI``` : (간단한 설명)
+> ```SkeketonMHI_ObjectDetection``` : detect the Skeleton MHI and recognize the action
 
 > ```Transformer``` : (간단한 설명)
 
