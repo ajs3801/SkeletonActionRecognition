@@ -1,6 +1,4 @@
-# Skeleton Action Recognition
-
-2022 LG U+ 성균관대학교 소프트웨어융합대학 산학협력프로젝트
+# 2022 LG U+ 성균관대학교 소프트웨어융합대학 산학협력프로젝트
 The variety methods for recognizing the action based on the feature of human skeleton.
 
 ## TREE
