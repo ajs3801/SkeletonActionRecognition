@@ -23,7 +23,8 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 
 # http://127.0.0.1:8000
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('127.0.0.1', 8000))
+client_socket.connect(("127.0.0.1", 8000))
+
 
 class Engine:
     def __init__(self, model_path, window_size, prob_threshold, count_threshold):
@@ -151,18 +152,17 @@ class Engine:
                         counted_action = self.counter.count(action_window)
                         if counted_action != None:
                             counted_action_sequence.append(counted_action)
-                    
 
                     # 현재 행동이 무슨 행동인지에 따라 local에 있는 json file을 바꿈
                     with open("data.json", "r+") as jsonFile:
                         data = json.load(jsonFile)
 
                         data["Action"] = str(action)
-                        if (data["ResetFlag"] == "1"):
-                            self.counter.cnt["squat"] = 0;
-                            self.counter.cnt["lunge"] = 0;
-                            self.counter.cnt["pushup"] = 0;
-                            data["ResetFlag"] = "0";
+                        if data["ResetFlag"] == "1":
+                            self.counter.cnt["squat"] = 0
+                            self.counter.cnt["lunge"] = 0
+                            self.counter.cnt["pushup"] = 0
+                            data["ResetFlag"] = "0"
 
                         data["Squat"] = str(self.counter.cnt["squat"])
                         data["Lunge"] = str(self.counter.cnt["lunge"])
@@ -199,8 +199,8 @@ class Engine:
                 #     )
                 # except:
                 #     pass
-      
-                cv2.imshow("Engine Test", image)
+
+                # cv2.imshow("Engine Test", image)
 
                 # webcam을 socket에 담아 보냄
                 memfile = BytesIO()
@@ -218,23 +218,24 @@ class Engine:
 
         return counted_action_sequence, self.counter.cnt, int(avg_fps)
 
+
 def get_label(video):
     label = video[:-7]
     return label
 
+
 def main():
     # 엔진에 탑재될 모델
-    model_path = (
-        "best_model/Modelv3_mk11.pt"
-    )
+    model_path = "best_model/Modelv3_mk11.pt"
     # 엔진 생성, 파라미터 설정
     my_engine = Engine(
         model_path, window_size=10, prob_threshold=0.7, count_threshold=8
     )
     # 엔진 설정값 보여줌
     my_engine.print_engine_config()
-    
+
     action_sequence, counts, fps = my_engine.test_engine(0)
+
 
 if __name__ == "__main__":
     main()
