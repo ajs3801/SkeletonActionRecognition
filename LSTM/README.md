@@ -1,6 +1,6 @@
 ## LSTM
 
-#congfigs.py : 
+# congfigs.py : 
 대부분의 코드 파일들에서 공유하는 변수들 정의
 
 extrafeatures.py : 미디어파이프로 추출한 스켈레톤 좌표를 모델의 입력에 맞는 형식의 스켈레톤 좌표 + 각도로 변환
